@@ -17,7 +17,7 @@ endif()
 
 ### LIBTORCH
 #set(Torch_DIR "/home/ubuntu/pytorch_master/pytorch/torch/share/cmake/Torch")  # libtorch
-set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "/root/Programs/libtorch/")
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "/root/libtorch/")
 
 find_package(Torch REQUIRED QUIET)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")

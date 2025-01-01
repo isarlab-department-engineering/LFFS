@@ -68,7 +68,7 @@
 
 #include "ORBextractor.h"
 
-#define WEIGHTS_PATH "../Programs/Weights/superpoint.pth"
+#define WEIGHTS_PATH "../Programs/superpoint.pth"
 
 #define NUM_KPTS 500
 

@@ -21,26 +21,16 @@ traj_final = os.path.join(absolute_path, dataset_name, seq_numb, 'traj_rotated.t
 names = ['timestamp', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
 
 df_result = pd.read_csv(traj_orig, sep=' ', header=None, index_col=False, names=names)
-# df_result.drop(df_result.head(1).index, inplace=True)
 df_result['timestamp'] *= 1e-9
 
 x_rot, y_rot, z_rot = 0, 0, 0
 if "tum" in dataset_name.lower():
     x_rot = 90
-    y_rot = 180
+    y_rot = 270
 elif "euroc" in dataset_name.lower():
     z_rot = 270
 elif "kitti" in dataset_name.lower():
     df_result['timestamp'] *= 1e9
-    df_result.to_csv(traj_final, sep=' ', header=False, index=False)
-    print("OS3/SuperSLAM3 output trajectory rotated: ", traj_final)
-    import sys
-    sys.exit(100)
-# elif dataset_name.lower() == "indoor_factory" or dataset_name.lower() == "office_building" or dataset_name.lower() == "office_space" or dataset_name.lower() == "abandoned_factory" or dataset_name.lower() == "city_park" or dataset_name.lower() == "urbancity":
-#     y_rot = 270
-#     z_rot = 270
-elif "marzaglia" in dataset_name.lower():
-    df_result['timestamp'] *= 1#e-9
     df_result.to_csv(traj_final, sep=' ', header=False, index=False)
     print("OS3/SuperSLAM3 output trajectory rotated: ", traj_final)
     import sys

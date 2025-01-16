@@ -63,15 +63,13 @@ SPDetector::SPDetector(std::string _weight_dir, bool _use_cuda)
                         .requires_grad(false);
 
     // bool is_cuda_available = _use_cuda && torch::cuda::is_available();
-    std::cout << "STO FACENDOOO QUIIIII" << std::endl;
+    std::cout << "Running Learned Features For SLAM..." << std::endl;
     if (_use_cuda)
     {
-        std::cout << "Loading model loaded into device" << std::endl;
         model->to(mDevice);
-        std::cout << "OK model loaded into device" << std::endl;
+        std::cout << "Model loaded into GPU device!" << std::endl;
     
     }
-    std::cout << "HO FATTOOOOOOOOOOOOOO" << std::endl;
     model->eval();
 }
 /*

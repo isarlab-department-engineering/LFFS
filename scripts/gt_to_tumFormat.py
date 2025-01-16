@@ -42,5 +42,12 @@ elif 'kitti' in dataset:
     df_result.drop(df_result.head(1).index,inplace=True)
     df_result['timestamp'] *= 1e-9
 
+elif 'TUM' in dataset:
+    names = ['timestamp', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
+    gt_original = pd.read_csv(complete_path, sep=' ', header=None, index_col=False, names=names)
+    gt_original['timestamp'] *= 1e-9
+    gt_original.to_csv(complete_final_gt_path, sep=' ', header=False, index=False)
+    print("GroundTruth saved in tum format in: ", complete_final_gt_path)
+
 else:
     assert False, "The given dataset does not exist!"

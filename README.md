@@ -1,9 +1,13 @@
 # LF²SLAM: Learning-based Features For visual SLAM
 
-<div align="center">
-  <img src="./overview.png" alt="Alt text" style="max-width: 50%; height: auto;">
-</div>
+## Project Page
+For a brief overview, a presentation video, and some qualitative results, please take a 
+look at our [project page](https://marcoleg.github.io/lf2slam/) :)
 
+
+[//]: <> (<div align="center">)
+[//]: <> (  <img src="./overview.png" alt="Alt text" style="max-width: 50%; height: auto;">)
+[//]: <> (</div>)
 
 ## Overview
 Learned Features For SLAM (LF²SLAM) is a hybrid Visual Odometry (VO) approach that integrates robust data-driven 
@@ -37,22 +41,59 @@ N.B. in our case ```CCAP=8.6```, therefore the provided Docker image can be used
 
 Run the Docker image with:
 ```
-docker run -td -i --privileged --net=host --name=Superpoint3 -v /tmp.X11-unix -e DISPLAY=$DISPLAY -e "QT_X11_NO_MITSHM=1" -h $HOSTNAME -v $XAUTHORITY:/root/.Xauthority:rw --runtime=nvidia --gpus all --env="NVIDIA_DRIVER_CAPABILITIES=all" <imageID>
+docker run -td -i --privileged --net=host --name=lffs -v /tmp.X11-unix -e DISPLAY=$DISPLAY -e "QT_X11_NO_MITSHM=1" -h $HOSTNAME -v $XAUTHORITY:/root/.Xauthority:rw --runtime=nvidia --gpus all --env="NVIDIA_DRIVER_CAPABILITIES=all" <imageID>
 ```
-You have to insert your ```<imageID>``` (that can be seen by running ```docker image list```), then:
+You have to insert your ```<imageID>``` (it can be seen by running ```docker image list```), then:
 ```
-docker exec Superpoint3 -it bash
-```
-
-## Run LF²SLAM on a sequence
-Please create a datasets dictory and an experimental results directory (```/root/Archive/Dataset``` and 
-```/root/Archive/exp_res``` in our case).
-```
-bash run_one_sequence.sh /root/Archive/Dataset /root/Archive/exp_res superslam /root/Programs/vo_scripts MH_01_easy euroc
+docker exec lffs -it bash
 ```
 
-In this command example, a EuRoC sequence is specified. You can also use a TUM sequence or create your own by using 
-the same formatting as TUM ones.
+## Run LF²SLAM
+
+### On a custom sequence from our dataset
+The following commands download our dataset sequence and run LF²SLAM. We created a ```/root/Archive``` directory,
+but you can use ```/root``` or create your own. 
+```
+cd /root/LFFS/scripts
+bash ./run_unilab_seq.sh /root/Archive/Dataset Casi3
+```
+The output trajectory will be the file
+```KeyFrameTrajectory.txt``` or ```CameraTrajectory.txt``` in the ```LFFS``` folder.
+
+### On a sequence from EuRoC dataset
+Please download a sequence from EuRoC dataset (*e.g.*, [MH_01_easy](http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/MH_01_easy.zip))),
+then unzip the sequence and create (if it does not exist) a folder hierarchy as above:
+```bash
+-- Dataset
+    |-- UniversityTUM
+    |   `-- Casi3
+    |       `-- images
+    `-- euroc
+        `-- MH_01_easy
+            `-- mav0
+```
+The EuRoC folder name has to be the same as the one you have to insert in the ```run_unilab_seq.sh``` script file,
+(line 7). Then run:
+```
+cd /root/LFFS/scripts
+bash ./run_unilab_seq.sh /root/Archive/Dataset MH_01_easy
+```
+You can also use a TUM sequence or create your own by using the same formatting as the others.
+
+## Trajectory Evaluation
+We use [EVO](https://github.com/MichaelGrupp/evo) to evaluate translation and rotation errors. By running:
+```
+cd /root/LFFS/scripts
+bash eval_traj.sh /root/Archive/Dataset /root/Archive/exp_res Casi3
+```
+in the ```exp_res``` directory, you can check two *.csv* files regarding the translational and rotational error respectively.
+Then, if you run:
+```
+evo_ape tum /root/Archive/exp_res/UniversityTUM/Casi3/gt_tumFormat.txt /root/Archive/exp_res/UniversityTUM/Casi3/traj_rotated.txt  -as --plot_mode=xy --save_plot /root/Archive/ 
+```
+you can obtain the ground-truth VS estimated trajectory plot, which highlights the translational error.
+
+To plot the rotational error over the trajectory, please add ```--pose_relation angle_deg``` to the above command.
 
 ## Cite
 To cite this work, please use the BibTeX below:
